@@ -1,8 +1,8 @@
 (include_subdirs qualified)
 
 (library
- (name test_pl_safari)
- (libraries common)
+ (name test_lambda)
+ (libraries lambda)
  (preprocess
   (pps ppx_inline_test ppx_assert))
  (inline_tests))
