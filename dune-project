@@ -23,3 +23,5 @@
  (tags
   ("programming languages" "compilers" "interpreters" "static analysis" your project)))
 
+(using menhir 3.0)
+
