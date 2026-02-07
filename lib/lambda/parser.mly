@@ -22,20 +22,20 @@ expr:
   | x = NAME; EQUALS; t = term { Decl (x, t) }
   | t = term { Term t }
 
-term: x = add_location(plain_term) { x }
-plain_term:
-  | LAMBDA; x = NAME; PERIOD; t = term { Abs (x, t) }
-  | e = plain_app_term { e } ;
+term:
+  | LAMBDA; x = NAME; PERIOD; t = term { Parsing.locate ~loc:(Parsing.mk_location $startpos $endpos) (Abs (x, t)) }
+  | e = app_term { e } ;
 
-app_term: add_location(plain_app_term) { $1 }
-plain_app_term:
-  | e = plain_var_term { e }
-  | e1 = app_term; e2 = var_term { App (e1, e2) } ;
+app_term:
+  | e = var_term; es = many_var_terms { List.fold_left (fun f a -> Parsing.locate ~loc:(Parsing.mk_location $startpos $endpos) (App(f, a))) e es }
 
-var_term: add_location(plain_var_term) { $1 }
-plain_var_term:
-  | x = NAME { Var x }
-  | LPAREN; e = plain_term; RPAREN { e } ;
+many_var_terms:
+  | (* empty *) { [] }
+  | e = var_term; es = many_var_terms { e :: es }
+
+var_term:
+  | x = NAME { Parsing.locate ~loc:(Parsing.mk_location $startpos $endpos) (Var x) }
+  | LPAREN; e = term; RPAREN { e } ;
 
 add_location(X):
   x = X

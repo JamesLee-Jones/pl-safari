@@ -8,7 +8,7 @@ let white = [' ' '\t']+
 let newline = '\r' | '\n' | "\r\n"
 
 let prime = '\''
-let name = ['a'-'z' 'A'-'Z'] ['a'-'z' 'A'-'Z' '0'-'9'] prime*
+let name = ['a'-'z' 'A'-'Z'] ['a'-'z' 'A'-'Z' '0'-'9']* prime*
 
 rule read =
   parse
