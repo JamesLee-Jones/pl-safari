@@ -1,0 +1,67 @@
+#!/usr/bin/env sh
+set -eu
+
+fail() {
+  echo "pre-commit: error: $1" >&2
+  exit 1
+}
+
+info() {
+  echo "pre-commit: $1"
+}
+
+# Ensure opam exists
+command -v opam >/dev/null 2>&1 \
+  || fail "opam not found in PATH"
+
+# Load opam environment
+eval "$(opam env)"
+
+# Only install if .opam files changed
+if git diff --cached --name-only HEAD | grep '\.opam$' >/dev/null; then
+    info "opam dependencies changed, installing..."
+    opam install . --deps-only -y \
+      || fail "failed to install opam dependencies"
+else
+    info "opam dependencies unchanged, skipping install"
+fi
+
+# Build
+info "running dune build"
+opam exec -- dune build \
+  || fail "dune build failed"
+
+# Formatting check
+if command -v ocamlformat >/dev/null 2>&1; then
+  info "checking formatting (dune @fmt)"
+  opam exec -- dune build @fmt \
+    || fail "formatting check failed (run dune fmt)"
+else
+  info "ocamlformat not found; skipping formatting check"
+fi
+
+# Ensure formatting did not modify files
+if ! git diff --quiet; then
+  fail "formatting produced changes; please commit formatted files"
+fi
+
+# Opam lint
+for f in *.opam; do
+  if [ -f "$f" ]; then
+    info "linting opam file: $f"
+    opam lint "$f" \
+      || fail "opam lint failed for $f"
+  fi
+done
+
+# Documentation build
+info "building documentation (dune @doc)"
+opam exec -- dune build @doc \
+  || fail "documentation build failed"
+
+# Check for whitespace / conflict markers in staged files
+info "checking staged diff for whitespace and conflict markers"
+git diff --check --cached \
+  || fail "staged diff contains whitespace errors or conflict markers"
+
+info "pre-commit checks passed"
