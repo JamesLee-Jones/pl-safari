@@ -19,7 +19,7 @@ bug-reports: "https://github.com/JamesLee-Jones/pl-safari/issues"
 depends: [
   "dune" {>= "3.20"}
   "ocaml"
-  "odoc" {with-doc}
+  "odoc"
 ]
 build: [
   ["dune" "subst"] {dev}
