@@ -17,10 +17,14 @@ command -v opam >/dev/null 2>&1 \
 # Load opam environment
 eval "$(opam env)"
 
-# Install dependencies (no tests)
-info "installing opam dependencies"
-opam install . --deps-only -y \
-  || fail "failed to install opam dependencies"
+# Only install if .opam files changed
+if git diff --cached --name-only HEAD | grep '\.opam$' >/dev/null; then
+    info "opam dependencies changed, installing..."
+    opam install . --deps-only -y \
+      || fail "failed to install opam dependencies"
+else
+    info "opam dependencies unchanged, skipping install"
+fi
 
 # Build
 info "running dune build"
