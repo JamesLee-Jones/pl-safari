@@ -1,0 +1,8 @@
+(library
+ (name lambda)
+ (libraries common))
+
+(menhir
+ (modules parser))
+
+(ocamllex lexer)
