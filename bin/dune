@@ -1,0 +1,4 @@
+(executable
+ (public_name pl-safari)
+ (name main)
+ (libraries pl_safari))
