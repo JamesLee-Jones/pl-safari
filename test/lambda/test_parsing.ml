@@ -21,8 +21,13 @@ let examples =
   [
     [];
     [ Term (locate (Var "x")) ];
+    [ Term (locate (Var "x1y'")) ];
     [ Term (locate (Abs ("x", locate (Var "y")))) ];
     [ Term (locate (App (locate (Var "x"), locate (Var "y")))) ];
+    [
+      Term
+        (locate (App (locate (Abs ("x", locate (Var "x"))), locate (Var "y"))));
+    ];
   ]
 
 let%test_unit "print_parse_round_trip" =
