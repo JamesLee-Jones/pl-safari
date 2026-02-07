@@ -15,7 +15,8 @@
 
 (package
  (name pl-safari)
- (description "A collection of small programming language implementations")
+ (synopsis "Implementations of small programming language")
+ (description "A collection of small implementations of programming languages, static analyses, and compiler testing tools.")
  (depends ocaml)
  (tags
   ("programming languages" "compilers" "interpreters" "static analysis" your project)))
