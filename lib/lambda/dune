@@ -1,8 +1,6 @@
 (library
  (name lambda)
- (libraries base common)
- (preprocess
-  (pps ppx_sexp_conv ppx_compare)))
+ (libraries base common))
 
 (menhir
  (modules parser))

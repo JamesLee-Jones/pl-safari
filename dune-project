@@ -20,7 +20,9 @@
  (depends
     ocaml
     odoc
-    menhir)
+    menhir
+    ppx_inline_test
+    ppx_assert)
  (tags
   ("programming languages" "compilers" "interpreters" "static analysis" your project)))
 
