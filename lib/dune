@@ -1,3 +1,2 @@
 (library
- (name pl_safari)
- (libraries ppx_deriving))
+ (name pl_safari))
