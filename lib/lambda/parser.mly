@@ -4,6 +4,7 @@
 %token PERIOD
 %token LPAREN
 %token RPAREN
+%token NEWLINE
 %token EOF
 
 %{
@@ -16,7 +17,8 @@ open Common
 
 prog:
   | EOF { [] }
-  | e = expr; p = prog { e :: p } ;
+  | NEWLINE; p = prog { p }
+  | e = expr; NEWLINE; p = prog { e :: p } ;
 
 expr:
   | x = NAME; EQUALS; t = term { Decl (x, t) }

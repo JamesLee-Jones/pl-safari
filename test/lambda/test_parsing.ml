@@ -17,30 +17,35 @@ let test_directory test_fn dir = List.iter test_fn (list_relative_directory dir)
 
 (* Test the round trip property of parsing and printing *)
 let test_valid file_path =
-  (* Parse input file *)
-  let ic = open_in file_path in
-  let in_lexbuf = Lexing.from_channel ~with_positions:true ic in
-  let in_tree = Lambda.Parser.prog Lambda.Lexer.read in_lexbuf in
+  try
+    (* Parse input file *)
+    let ic = open_in file_path in
+    let in_lexbuf = Lexing.from_channel ~with_positions:true ic in
+    let in_tree = Lambda.Parser.prog Lambda.Lexer.read in_lexbuf in
 
-  (* Print to buffer *)
-  let in_buff = Buffer.create 16 in
-  let in_ppf = formatter_of_buffer in_buff in
-  Lambda.Print.prog in_ppf in_tree;
+    (* Print to buffer *)
+    let in_buff = Buffer.create 16 in
+    let in_ppf = formatter_of_buffer in_buff in
+    Lambda.Print.prog in_ppf in_tree;
 
-  (* Reparse *)
-  let out_lexbuf =
-    Lexing.from_string ~with_positions:false (Buffer.contents in_buff)
-  in
-  let out_tree = Lambda.Parser.prog Lambda.Lexer.read out_lexbuf in
+    (* Reparse *)
+    let out_lexbuf =
+      Lexing.from_string ~with_positions:false (Buffer.contents in_buff)
+    in
+    let out_tree = Lambda.Parser.prog Lambda.Lexer.read out_lexbuf in
 
-  (* Reprint *)
-  let out_buff = Buffer.create 16 in
-  let out_ppf = formatter_of_buffer out_buff in
-  Lambda.Print.prog out_ppf out_tree;
+    (* Reprint *)
+    let out_buff = Buffer.create 16 in
+    let out_ppf = formatter_of_buffer out_buff in
+    Lambda.Print.prog out_ppf out_tree;
 
-  (* Check printed results are equal *)
-  assert_string_equal ~expected:(Buffer.contents in_buff)
-    ~actual:(Buffer.contents out_buff)
+    (* Check printed results are equal *)
+    assert_string_equal ~expected:(Buffer.contents in_buff)
+      ~actual:(Buffer.contents out_buff)
+  with e ->
+    failwith
+      (Printf.sprintf "Roundtrip failed for %s with %s" file_path
+         (Printexc.to_string e))
 
 (* Test that parsing fails with a syntax error *)
 let test_syntax_error file_path =
