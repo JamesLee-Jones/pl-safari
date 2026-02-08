@@ -3,7 +3,6 @@ open Common
 type index = int
 type indexed_name = index * Syntax.name
 
-exception Temp of string
 
 type term = term' Parsing.located
 

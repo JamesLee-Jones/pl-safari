@@ -1,6 +1,8 @@
 open Common
 open Ir
 
+exception EvalError of string
+
 (* [shift d ?(c=0) located_term] shifts all variables above the cutoff [c] by [d]. *)
 let rec shift d ?(c = 0) (located_term : term) =
   let shifted =
@@ -42,7 +44,7 @@ let rec eval_term ?(strict = true) ?(deep = false) (located_term : term) =
         Parsing.locate ~loc:located_term.loc
           (Abs (x, eval_term ~strict ~deep t))
       else located_term
-  | _ -> raise (Temp "AHHH")
+  | _ -> raise (EvalError "Failed to evaluate term")
 
 (* [eval] evaluates an expression, with the arguments indicating how the expression should be evaluated *)
 let eval ?(strict = true) ?(deep = false) = function
