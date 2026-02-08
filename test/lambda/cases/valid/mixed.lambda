@@ -1,0 +1,6 @@
+x y
+test = x y
+
+\a.test b c
+
+x = test test
