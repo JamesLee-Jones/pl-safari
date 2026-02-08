@@ -19,7 +19,8 @@
  (description "A collection of small implementations of programming languages, static analyses, and compiler testing tools.")
  (depends
     ocaml
-    odoc)
+    odoc
+    menhir)
  (tags
   ("programming languages" "compilers" "interpreters" "static analysis" your project)))
 
