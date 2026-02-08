@@ -15,9 +15,9 @@ let mk_indexed_name loc x ctx =
   let* index = lookup_index loc x ctx in
   Ok (index, x)
 
-let rec term ctx { Parsing.data = t; Parsing.loc } =
+let rec term ctx (t : Syntax.term) =
   let* desugared =
-    match t with
+    match t.data with
     | Abs (x, t) ->
         let* desugared = term (x :: ctx) t in
         Result.Ok (Ir.Abs (x, desugared))
@@ -26,10 +26,10 @@ let rec term ctx { Parsing.data = t; Parsing.loc } =
         let* t2_desugared = term ctx t2 in
         Result.Ok (Ir.App (t1_desugared, t2_desugared))
     | Var x ->
-        let* index = mk_indexed_name loc x ctx in
+        let* index = mk_indexed_name t.loc x ctx in
         Result.Ok (Ir.Var index)
   in
-  Result.Ok (Parsing.locate ~loc desugared)
+  Result.Ok (Parsing.locate ~loc:t.loc desugared)
 
 let expr = function
   | Decl (x, t) ->
