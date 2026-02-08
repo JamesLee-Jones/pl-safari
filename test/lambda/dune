@@ -2,7 +2,7 @@
 
 (library
  (name test_lambda)
- (libraries lambda base)
+ (libraries lambda)
  (preprocess
   (pps ppx_inline_test ppx_assert))
  (inline_tests

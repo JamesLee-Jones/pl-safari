@@ -21,6 +21,8 @@ depends: [
   "ocaml"
   "odoc"
   "menhir"
+  "ppx_inline_test"
+  "ppx_assert"
 ]
 build: [
   ["dune" "subst"] {dev}
