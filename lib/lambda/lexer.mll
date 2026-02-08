@@ -13,7 +13,7 @@ let name = ['a'-'z' 'A'-'Z'] ['a'-'z' 'A'-'Z' '0'-'9']* prime*
 rule read =
   parse
   | white { read lexbuf }
-  | newline { new_line lexbuf; read lexbuf }
+  | newline { new_line lexbuf; NEWLINE }
   | name { NAME (Lexing.lexeme lexbuf) }
   | "\\" { LAMBDA }
   | "=" { EQUALS }

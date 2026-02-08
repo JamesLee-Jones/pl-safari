@@ -1,0 +1,4 @@
+test = x
+test2 = x y z
+test3 = \x.x
+a = \y.\x.x y z
