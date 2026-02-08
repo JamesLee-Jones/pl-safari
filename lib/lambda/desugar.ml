@@ -30,3 +30,11 @@ let rec term ctx { Parsing.data = t; Parsing.loc } =
         Result.Ok (Ir.Var index)
   in
   Result.Ok (Parsing.locate ~loc desugared)
+
+let expr = function
+  | Decl (x, t) ->
+      let* desugared = term [] t in
+      Result.Ok (Ir.Decl ((0, x), desugared))
+  | Term t ->
+      let* desugared = term [] t in
+      Result.Ok (Ir.Term desugared)
